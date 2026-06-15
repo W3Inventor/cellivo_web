@@ -638,6 +638,7 @@ const getDatabase = () => {
   seedHomepageSocialProof();
   seedPricingPlanLinks();
   seedPricingPlanAmounts();
+  syncLitePricingAmounts();
   seedPricingPlanCurrencyLinks();
   seedSeoSettings();
   seedSmtpSettings();
@@ -876,6 +877,24 @@ const seedPricingPlanAmounts = () => {
       plan.billingCycle,
     );
   });
+};
+
+const syncLitePricingAmounts = () => {
+  const database = db;
+  const updateLiteAmounts = database.prepare(
+    `UPDATE pricing_plan_cta_links
+     SET lkr_price = ?,
+         usd_price = ?,
+         updated_at = ?
+     WHERE plan_key = 'lite' AND billing_cycle = ?`,
+  );
+
+  const timestamp = nowIso();
+  DEFAULT_PRICING_PLAN_LINKS
+    .filter((plan) => plan.planKey === "lite")
+    .forEach((plan) => {
+      updateLiteAmounts.run(plan.lkrPrice, plan.usdPrice, timestamp, plan.billingCycle);
+    });
 };
 
 const seedPricingPlanCurrencyLinks = () => {
