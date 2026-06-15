@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CreditCard, ExternalLink, Link2, Save } from "lucide-react";
 
 import SEOHead from "@/components/SEOHead";
@@ -7,16 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useInitialData } from "@/contexts/InitialDataContext";
 import { fetchAdminPricingPlanLinks, saveAdminPricingPlanLinks } from "@/lib/admin-api";
 import type { PricingBillingCycle, PricingPlanKey, PricingPlanLinkRecord } from "@/lib/blog";
 
-const planHints: Record<string, string> = {
-  lite: "Entry plan CTA for simple retail shops, usually linked to Lite checkout.",
-  starter: "Single-branch plan CTA, usually linked to signup.",
-  growth: "Most-popular plan CTA, usually linked to signup.",
-  business: "Higher-capacity plan CTA, usually linked to signup or sales.",
-  unlimited: "Custom/franchise plan CTA, usually linked to contact or demo.",
+const planHints: Record<PricingPlanKey, string> = {
+  lite: "Entry plan for lean retail shops.",
+  starter: "Single-branch phone shop plan.",
+  growth: "Most-popular multi-location plan.",
+  business: "Higher-capacity retailer plan.",
+  unlimited: "Custom/franchise plan.",
 };
 
 const planOrder: PricingPlanKey[] = ["lite", "starter", "growth", "business", "unlimited"];
@@ -28,11 +29,23 @@ const billingLabels: Record<PricingBillingCycle, string> = {
   lifetime: "Lifetime",
 };
 
+const billingHelp: Record<PricingBillingCycle, string> = {
+  monthly: "Recurring monthly checkout links and monthly displayed prices.",
+  yearly: "Annual checkout links and yearly displayed prices.",
+  lifetime: "One-time lifetime checkout links and lifetime displayed prices.",
+};
+
+const planSortValue = (planKey: PricingPlanKey) => {
+  const index = planOrder.indexOf(planKey);
+  return index === -1 ? planOrder.length : index;
+};
+
 const AdminPricingLinks = () => {
   const initialData = useInitialData();
   const [pricingLinks, setPricingLinks] = useState<PricingPlanLinkRecord[]>(
     initialData.adminPricingPlanLinks ?? [],
   );
+  const [activeBilling, setActiveBilling] = useState<PricingBillingCycle>("monthly");
   const [loading, setLoading] = useState(!initialData.adminPricingPlanLinks);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ tone: "success" | "error"; text: string } | null>(null);
@@ -77,120 +90,126 @@ const AdminPricingLinks = () => {
   const getPlanLinkIndex = (planKey: PricingPlanKey, billingCycle: PricingBillingCycle) =>
     pricingLinks.findIndex((link) => link.planKey === planKey && link.billingCycle === billingCycle);
 
-  const orderedPlanKeys = planOrder.filter((planKey) => pricingLinks.some((link) => link.planKey === planKey));
+  const orderedPlanKeys = useMemo(
+    () => planOrder.filter((planKey) => pricingLinks.some((link) => link.planKey === planKey)),
+    [pricingLinks],
+  );
   const primaryPlanKeys = orderedPlanKeys.filter((planKey) => planKey !== "unlimited");
   const unlimitedPlanKey = orderedPlanKeys.find((planKey) => planKey === "unlimited");
+  const activePreviewPlans = pricingLinks
+    .filter((plan) => plan.billingCycle === activeBilling)
+    .sort((a, b) => planSortValue(a.planKey) - planSortValue(b.planKey));
 
-  const renderPlanCard = (planKey: PricingPlanKey, isWide = false) => {
-    const firstPlanLink = pricingLinks.find((link) => link.planKey === planKey);
+  const renderPlanEditor = (planKey: PricingPlanKey) => {
+    const index = getPlanLinkIndex(planKey, activeBilling);
+    const plan = pricingLinks[index];
+    if (!plan) return null;
+
+    const isUnlimited = planKey === "unlimited";
 
     return (
-      <Card key={planKey} className="border-slate-200 shadow-sm">
-        <CardHeader>
-          <div className="flex items-start gap-3">
-            <div className="rounded-2xl bg-slate-100 p-3 text-slate-700">
-              <CreditCard size={18} />
-            </div>
-            <div>
-              <CardTitle>{firstPlanLink?.planName ?? planKey} package</CardTitle>
-              <CardDescription>{planHints[planKey] ?? "Pricing package CTA settings."}</CardDescription>
+      <div
+        key={`${planKey}-${activeBilling}`}
+        className={`rounded-2xl border p-5 ${
+          isUnlimited ? "border-indigo-200 bg-indigo-50/40" : "border-slate-200 bg-white"
+        }`}
+      >
+        <div className="grid gap-5 xl:grid-cols-[220px_minmax(0,1fr)]">
+          <div className="min-w-0">
+            <div className="flex items-start gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                <CreditCard size={18} />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-lg font-semibold leading-tight text-slate-950">{plan.planName}</h3>
+                <p className="mt-1 text-sm leading-5 text-slate-500">{planHints[planKey]}</p>
+                <span className="mt-3 inline-flex rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
+                  {billingLabels[activeBilling]}
+                </span>
+              </div>
             </div>
           </div>
-        </CardHeader>
-        <CardContent className={isWide ? "grid gap-4 lg:grid-cols-3" : "space-y-4"}>
-          {billingCycles.map((billingCycle) => {
-            const index = getPlanLinkIndex(planKey, billingCycle);
-            const plan = pricingLinks[index];
-            if (!plan) return null;
 
-            return (
-              <div key={`${planKey}-${billingCycle}`} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <p className="text-sm font-semibold text-slate-950">{billingLabels[billingCycle]}</p>
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-500">
-                    {plan.planName}
-                  </span>
-                </div>
-                <div
-                  className={
-                    isWide
-                      ? "grid gap-4 sm:grid-cols-2 lg:grid-cols-1"
-                      : "grid gap-4 md:grid-cols-2 xl:grid-cols-1"
-                  }
-                >
-                  <div className="space-y-2">
-                    <Label>LKR price</Label>
-                    <Input
-                      value={plan.lkrPrice}
-                      onChange={(event) => updatePlanLink(index, "lkrPrice", event.target.value)}
-                      placeholder="7000"
-                      inputMode="decimal"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>USD price</Label>
-                    <Input
-                      value={plan.usdPrice}
-                      onChange={(event) => updatePlanLink(index, "usdPrice", event.target.value)}
-                      placeholder="23"
-                      inputMode="decimal"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Button text</Label>
-                    <Input
-                      value={plan.ctaLabel}
-                      onChange={(event) => updatePlanLink(index, "ctaLabel", event.target.value)}
-                      placeholder="Start Free"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>LKR button link</Label>
-                    <div className="relative">
-                      <Link2
-                        size={14}
-                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                      />
-                      <Input
-                        value={plan.lkrCtaUrl}
-                        onChange={(event) => updatePlanLink(index, "lkrCtaUrl", event.target.value)}
-                        placeholder="/pricing or https://example.com"
-                        className="pl-9"
-                      />
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      Used when the visitor sees {billingLabels[billingCycle]} pricing in LKR.
-                    </p>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>USD button link</Label>
-                    <div className="relative">
-                      <Link2
-                        size={14}
-                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                      />
-                      <Input
-                        value={plan.usdCtaUrl}
-                        onChange={(event) => updatePlanLink(index, "usdCtaUrl", event.target.value)}
-                        placeholder="/pricing or https://example.com"
-                        className="pl-9"
-                      />
-                    </div>
-                    <p className="text-xs text-slate-500">
-                      Used when the visitor sees {billingLabels[billingCycle]} pricing in USD.
-                    </p>
-                  </div>
-                </div>
-                <p className="mt-3 text-xs text-slate-500">
-                  Leave a price blank if you want that billing cycle to show Contact Us instead of a numeric amount.
-                </p>
+          <div className="grid gap-4">
+            <div className="grid gap-4 md:grid-cols-[120px_120px_170px_minmax(0,1fr)]">
+              <div className="space-y-2">
+                <Label>LKR price</Label>
+                <Input
+                  value={plan.lkrPrice}
+                  onChange={(event) => updatePlanLink(index, "lkrPrice", event.target.value)}
+                  placeholder="3900"
+                  inputMode="decimal"
+                />
               </div>
-            );
-          })}
-        </CardContent>
-      </Card>
+              <div className="space-y-2">
+                <Label>USD price</Label>
+                <Input
+                  value={plan.usdPrice}
+                  onChange={(event) => updatePlanLink(index, "usdPrice", event.target.value)}
+                  placeholder="13"
+                  inputMode="decimal"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Button text</Label>
+                <Input
+                  value={plan.ctaLabel}
+                  onChange={(event) => updatePlanLink(index, "ctaLabel", event.target.value)}
+                  placeholder="Start Free"
+                />
+              </div>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-500">
+                Blank price shows Contact Us on the public pricing page.
+              </div>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="space-y-2">
+                <Label>LKR button link</Label>
+                <div className="relative">
+                  <Link2
+                    size={14}
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <Input
+                    value={plan.lkrCtaUrl}
+                    onChange={(event) => updatePlanLink(index, "lkrCtaUrl", event.target.value)}
+                    placeholder="https://account.cellivo.com/..."
+                    className="pl-9"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>USD button link</Label>
+                <div className="relative">
+                  <Link2
+                    size={14}
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <Input
+                    value={plan.usdCtaUrl}
+                    onChange={(event) => updatePlanLink(index, "usdCtaUrl", event.target.value)}
+                    placeholder="https://account.cellivo.com/..."
+                    className="pl-9"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     );
   };
+
+  const renderPreviewUrl = (label: string, url: string) => (
+    <div className="min-w-0 rounded-xl border border-slate-200 bg-white px-3 py-3">
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="mt-1 truncate text-sm font-medium text-slate-950">
+        {url ? "Button set" : "No link set"}
+      </p>
+      <p className="mt-1 break-all text-xs leading-5 text-slate-500">{url || "-"}</p>
+    </div>
+  );
 
   return (
     <>
@@ -206,101 +225,111 @@ const AdminPricingLinks = () => {
         actions={
           <Button type="button" className="rounded-xl" onClick={handleSave} disabled={saving || loading}>
             <Save className="mr-2" size={16} />
-            {saving ? "Saving…" : "Save Pricing Plans"}
+            {saving ? "Saving..." : "Save Pricing Plans"}
           </Button>
         }
       >
-        <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_420px]">
-          <div className="space-y-4">
-            {message ? (
-              <div
-                className={`rounded-2xl border px-4 py-3 text-sm ${
-                  message.tone === "success"
-                    ? "border-green-200 bg-green-50 text-green-700"
-                    : "border-red-200 bg-red-50 text-red-700"
-                }`}
-              >
-                {message.text}
+        <div className="space-y-6">
+          {message ? (
+            <div
+              className={`rounded-2xl border px-4 py-3 text-sm ${
+                message.tone === "success"
+                  ? "border-green-200 bg-green-50 text-green-700"
+                  : "border-red-200 bg-red-50 text-red-700"
+              }`}
+            >
+              {message.text}
+            </div>
+          ) : null}
+
+          <Card className="border-slate-200 shadow-sm">
+            <CardHeader className="border-b border-slate-100">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <CardTitle>Package editor</CardTitle>
+                  <CardDescription>{billingHelp[activeBilling]}</CardDescription>
+                </div>
+                <Tabs value={activeBilling} onValueChange={(value) => setActiveBilling(value as PricingBillingCycle)}>
+                  <TabsList className="grid w-full grid-cols-3 lg:w-[360px]">
+                    {billingCycles.map((billingCycle) => (
+                      <TabsTrigger key={billingCycle} value={billingCycle}>
+                        {billingLabels[billingCycle]}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
               </div>
-            ) : null}
-
-            {loading ? (
-              <Card className="border-slate-200 shadow-sm">
-                <CardContent className="px-6 py-10 text-center text-sm text-slate-500">
-                  Loading pricing links…
-                </CardContent>
-              </Card>
-            ) : (
-              <>
-                <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-4">
-                  {primaryPlanKeys.map((planKey) => renderPlanCard(planKey))}
+            </CardHeader>
+            <CardContent className="p-5">
+              {loading ? (
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-6 py-10 text-center text-sm text-slate-500">
+                  Loading pricing links...
                 </div>
-                {unlimitedPlanKey ? renderPlanCard(unlimitedPlanKey, true) : null}
-              </>
-            )}
-          </div>
-
-          <div className="space-y-6 2xl:sticky 2xl:top-24 2xl:self-start">
-            <Card className="border-slate-200 shadow-sm">
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <div className="rounded-2xl bg-slate-100 p-3 text-slate-700">
-                    <ExternalLink size={18} />
-                  </div>
-                  <div>
-                    <CardTitle>Live link preview</CardTitle>
-                    <CardDescription>These are the currency-based buttons visitors will see on /pricing.</CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {billingCycles.map((billingCycle) => (
-                  <div key={`preview-${billingCycle}`} className="rounded-2xl border border-slate-200 bg-white px-4 py-4">
-                    <p className="mb-3 text-sm font-semibold text-slate-950">{billingLabels[billingCycle]} buttons</p>
+              ) : (
+                <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_420px]">
+                  <div className="space-y-5">
                     <div className="space-y-3">
-                      {pricingLinks
-                        .filter((plan) => plan.billingCycle === billingCycle)
-                        .map((plan) => (
-                          <div key={`preview-${plan.planKey}-${billingCycle}`}>
-                            <p className="text-xs font-medium text-slate-500">{plan.planName}</p>
-                            <p className="mt-1 text-sm text-slate-700">
-                              {plan.lkrPrice ? `LKR ${plan.lkrPrice}` : "No LKR price"}
-                              {plan.usdPrice ? ` • USD ${plan.usdPrice}` : ""}
-                            </p>
-                            <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                      <div className="flex items-center justify-between gap-3">
+                        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                          Main packages
+                        </h2>
+                        <span className="text-xs text-slate-400">{primaryPlanKeys.length} plans</span>
+                      </div>
+                      <div className="space-y-3">{primaryPlanKeys.map((planKey) => renderPlanEditor(planKey))}</div>
+                    </div>
+
+                    {unlimitedPlanKey ? (
+                      <div className="space-y-3">
+                        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                          Custom package
+                        </h2>
+                        {renderPlanEditor(unlimitedPlanKey)}
+                      </div>
+                    ) : null}
+                  </div>
+
+                  <aside className="2xl:sticky 2xl:top-24 2xl:self-start">
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <div className="mb-4 flex items-start gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-slate-700">
+                          <ExternalLink size={18} />
+                        </div>
+                        <div>
+                          <h2 className="text-base font-semibold text-slate-950">Live link preview</h2>
+                          <p className="text-sm leading-5 text-slate-500">
+                            {billingLabels[activeBilling]} buttons shown on /pricing.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-3">
+                        {activePreviewPlans.map((plan) => (
+                          <div key={`preview-${plan.planKey}-${activeBilling}`} className="rounded-2xl bg-white p-4">
+                            <div className="flex items-center justify-between gap-3">
                               <div>
-                                <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">LKR button</p>
-                                <a
-                                  href={plan.lkrCtaUrl || plan.ctaUrl || "#"}
-                                  className="inline-flex min-h-10 w-full items-center justify-center rounded-xl bg-slate-950 px-4 text-sm font-medium text-white"
-                                  target={(plan.lkrCtaUrl || plan.ctaUrl || "").startsWith("http") ? "_blank" : undefined}
-                                  rel={(plan.lkrCtaUrl || plan.ctaUrl || "").startsWith("http") ? "noreferrer" : undefined}
-                                >
-                                  {plan.ctaLabel || "Button text"}
-                                </a>
-                                <p className="mt-1 break-all text-xs text-slate-500">{plan.lkrCtaUrl || plan.ctaUrl || "No LKR link set"}</p>
+                                <p className="text-sm font-semibold text-slate-950">{plan.planName}</p>
+                                <p className="mt-1 text-sm text-slate-600">
+                                  {plan.lkrPrice ? `LKR ${plan.lkrPrice}` : "No LKR price"}
+                                  {plan.usdPrice ? ` | USD ${plan.usdPrice}` : ""}
+                                </p>
                               </div>
-                              <div>
-                                <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">USD button</p>
-                                <a
-                                  href={plan.usdCtaUrl || plan.ctaUrl || "#"}
-                                  className="inline-flex min-h-10 w-full items-center justify-center rounded-xl bg-slate-950 px-4 text-sm font-medium text-white"
-                                  target={(plan.usdCtaUrl || plan.ctaUrl || "").startsWith("http") ? "_blank" : undefined}
-                                  rel={(plan.usdCtaUrl || plan.ctaUrl || "").startsWith("http") ? "noreferrer" : undefined}
-                                >
-                                  {plan.ctaLabel || "Button text"}
-                                </a>
-                                <p className="mt-1 break-all text-xs text-slate-500">{plan.usdCtaUrl || plan.ctaUrl || "No USD link set"}</p>
-                              </div>
+                              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500">
+                                {plan.ctaLabel || "Button"}
+                              </span>
+                            </div>
+                            <div className="mt-3 grid gap-2 sm:grid-cols-2 2xl:grid-cols-1">
+                              {renderPreviewUrl("LKR", plan.lkrCtaUrl || plan.ctaUrl)}
+                              {renderPreviewUrl("USD", plan.usdCtaUrl || plan.ctaUrl)}
                             </div>
                           </div>
                         ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </div>
+                  </aside>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </AdminShell>
     </>
