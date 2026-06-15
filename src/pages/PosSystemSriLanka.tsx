@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import DemoBookingButton from "@/components/DemoBookingButton";
 import SEOHead from "@/components/SEOHead";
 import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
@@ -19,11 +20,11 @@ const whySriLanka = [
 ];
 
 const features = [
-  { icon: Receipt, title: "POS Billing in LKR", desc: "Create invoices in Sri Lankan Rupees with proper tax calculations and digital receipts.", link: "/pos-billing-system" },
-  { icon: Hash, title: "IMEI Stock Control", desc: "Track every phone by IMEI — essential for Sri Lankan mobile retailers.", link: "/imei-tracking-pos" },
+  { icon: Receipt, title: "POS Billing in LKR", desc: "Create invoices in Sri Lankan Rupees with proper tax calculations and digital receipts.", link: "/billing-software-for-mobile-shop" },
+  { icon: Hash, title: "IMEI Stock Control", desc: "Track every phone by IMEI — essential for Sri Lankan mobile retailers.", link: "/imei-tracking-pos-system" },
   { icon: Wrench, title: "Repair Management", desc: "Manage phone repairs with job tracking and customer notifications.", link: "/mobile-repair-management-software" },
   { icon: Package, title: "Inventory Control", desc: "Track phones, accessories, and spare parts across your Sri Lankan shop.", link: "/inventory-management-system" },
-  { icon: Building2, title: "Multi-Branch", desc: "Manage shops across Colombo, Kandy, Galle, or anywhere in Sri Lanka.", link: "/multi-branch-pos" },
+  { icon: Building2, title: "Multi-Branch", desc: "Manage shops across Colombo, Kandy, Galle, or anywhere in Sri Lanka.", link: "/multi-branch-pos-system" },
   { icon: Users, title: "Customer Management", desc: "Build customer relationships with purchase history and loyalty rewards.", link: "/customer-loyalty-system" },
 ];
 
@@ -31,13 +32,28 @@ const PosSystemSriLanka = () => (
   <Layout>
     <SEOHead
       title="POS System for Phone Shops in Sri Lanka | Cellivo"
-      description="Cellivo is the #1 POS system for mobile phone shops in Sri Lanka. IMEI-based stock control, repair management, LKR billing, and inventory control. Start your free trial today."
-      canonical="https://cellivo.lovable.app/pos-system-sri-lanka"
+      description="POS system for phone shops in Sri Lanka with billing, IMEI tracking, repairs, inventory control, and multi-branch tools for mobile retailers."
+      canonical="https://cellivo.com/pos-system-sri-lanka"
+      structuredData={{
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "Cellivo",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        description:
+          "POS system for phone shops in Sri Lanka with IMEI stock control, repair management, LKR billing, and inventory control.",
+        url: "https://cellivo.com/pos-system-sri-lanka",
+      }}
+      breadcrumbs={[
+        { name: "Home", path: "/" },
+        { name: "Mobile Shop POS System", path: "/mobile-shop-pos-system" },
+        { name: "POS System Sri Lanka", path: "/pos-system-sri-lanka" },
+      ]}
     />
 
     <section className="pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-secondary/50 to-background">
       <div className="container mx-auto px-4 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
+        <div className="max-w-3xl">
           <span className="section-header-label flex items-center gap-2">
             <MapPin size={12} /> Sri Lanka
           </span>
@@ -48,16 +64,16 @@ const PosSystemSriLanka = () => (
             The most complete POS system for Sri Lankan mobile phone shops. Manage sales, IMEI-based stock control, repairs, and inventory — designed for your local market.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <Link to="/signup">
+            <Link to="/pricing">
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-8 h-12 rounded-xl text-sm">
                 Start Free Trial <ArrowRight className="ml-2" size={16} />
               </Button>
             </Link>
-            <Link to="/contact">
-              <Button variant="outline" className="font-medium px-8 h-12 rounded-xl text-sm">Book a Demo</Button>
-            </Link>
+            <DemoBookingButton variant="outline" className="font-medium px-8 h-12 rounded-xl text-sm">
+              Book a Demo
+            </DemoBookingButton>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
 
@@ -70,7 +86,15 @@ const PosSystemSriLanka = () => (
             Built for Sri Lankan Phone Shops
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Whether you run a phone shop in Colombo, Kandy, Galle, or any town in Sri Lanka, Cellivo is designed to meet your specific needs.
+            Whether you run a phone shop in Colombo, Kandy, Galle, or any town in Sri Lanka, Cellivo is designed to meet your specific needs. You can start with the full{" "}
+            <Link to="/mobile-shop-pos-system" className="text-primary hover:underline">
+              mobile shop POS system
+            </Link>{" "}
+            overview and move into a dedicated{" "}
+            <Link to="/pos-system-for-phone-shop" className="text-primary hover:underline">
+              POS system for phone shop
+            </Link>{" "}
+            billing workflow as your counter volume grows.
           </p>
           <ul className="space-y-3">
             {whySriLanka.map((item) => (
@@ -127,7 +151,7 @@ const PosSystemSriLanka = () => (
             Join Sri Lankan phone shop owners who manage their entire business on Cellivo.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/signup">
+            <Link to="/pricing">
               <Button size="lg" className="rounded-xl font-medium px-8 bg-white text-foreground hover:bg-white/90">
                 Start Free Trial <ArrowRight className="ml-2" size={16} />
               </Button>

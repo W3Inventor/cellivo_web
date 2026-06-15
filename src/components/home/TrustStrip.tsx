@@ -1,13 +1,13 @@
-import { motion } from "framer-motion";
+import { motion } from "@/components/LightMotion";
 import { Hash, Zap, Wrench, BarChart3, Package, ShieldCheck } from "lucide-react";
 
 const items = [
-  { icon: Zap, label: "Instant Access — No Setup" },
-  { icon: Hash, label: "IMEI-Based Stock Control" },
-  { icon: Wrench, label: "Full Repair Lifecycle" },
-  { icon: BarChart3, label: "Live Profit Reports" },
+  { icon: Zap, label: "POS Billing in Seconds" },
+  { icon: Hash, label: "IMEI and Serial Tracking" },
+  { icon: Wrench, label: "Repair Job Workflow" },
+  { icon: BarChart3, label: "Live Sales and Profit Reports" },
   { icon: Package, label: "Accessory Stock Alerts" },
-  { icon: ShieldCheck, label: "Secure Cloud Platform" },
+  { icon: ShieldCheck, label: "Cloud Access on Any Device" },
 ];
 
 const TrustStrip = () => (

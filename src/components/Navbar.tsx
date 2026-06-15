@@ -1,16 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, User, LogOut, ChevronDown, Zap, Hash, ArrowLeftRight, Wrench, Banknote, Landmark, BadgeDollarSign, Building2, TrendingUp, ShoppingCart, Shield, CalendarCheck, BarChart3, Users, LayoutDashboard } from "lucide-react";
+import { Menu, X, User, LogOut, ChevronDown, Zap, Hash, Wrench, Banknote, Landmark, BadgeDollarSign, Building2, TrendingUp, ShoppingCart, Shield, CalendarCheck, BarChart3, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import cellivoLogo from "@/assets/cellivo-logo.png";
+import cellivoLogo from "@/assets/cellivo-logo.webp";
 import { LucideIcon } from "lucide-react";
 
 interface MegaLink {
@@ -29,7 +21,7 @@ const megaCategories: MegaCategory[] = [
   {
     name: "Sales & POS",
     links: [
-      { label: "POS & Billing", path: "/pos-billing-system", icon: Zap, desc: "Fast billing & invoicing" },
+      { label: "POS & Billing", path: "/billing-software-for-mobile-shop", icon: Zap, desc: "Fast billing & invoicing" },
       { label: "Repair Management", path: "/mobile-repair-management-software", icon: Wrench, desc: "Job tracking & invoicing" },
       { label: "Credit & Loyalty", path: "/customer-loyalty-system", icon: CalendarCheck, desc: "Installments & rewards" },
     ],
@@ -37,9 +29,9 @@ const megaCategories: MegaCategory[] = [
   {
     name: "Inventory & Stock",
     links: [
-      { label: "IMEI Tracking", path: "/imei-tracking-pos", icon: Hash, desc: "IMEI-level stock control" },
+      { label: "IMEI Tracking", path: "/imei-tracking-pos-system", icon: Hash, desc: "IMEI-level stock control" },
       { label: "Inventory Management", path: "/inventory-management-system", icon: LayoutDashboard, desc: "Purchase orders & GRN" },
-      { label: "Multi-Branch", path: "/multi-branch-pos", icon: Building2, desc: "Branch transfers & control" },
+      { label: "Multi-Branch", path: "/multi-branch-pos-system", icon: Building2, desc: "Branch transfers & control" },
     ],
   },
   {
@@ -61,10 +53,13 @@ const megaCategories: MegaCategory[] = [
 ];
 
 const allFeaturePaths = megaCategories.flatMap((c) => c.links.map((l) => l.path));
+const ACCOUNT_LOGIN_URL = "https://account.cellivo.com/login";
 
 const navLinks = [
   { label: "Home", path: "/" },
   { label: "Features", path: "/features", mega: true },
+  { label: "Mobile Shop POS", path: "/mobile-shop-pos-system" },
+  { label: "POS for Phone Shops", path: "/pos-system-for-phone-shop" },
   { label: "Pricing", path: "/pricing" },
   { label: "Blog", path: "/blog" },
   { label: "About", path: "/about" },
@@ -77,10 +72,12 @@ const Navbar = () => {
   const [featuresOpen, setFeaturesOpen] = useState(false);
   const [mobileFeaturesOpen, setMobileFeaturesOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const featuresRef = useRef<HTMLDivElement>(null);
   const megaRef = useRef<HTMLDivElement>(null);
+  const accountRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
@@ -89,7 +86,12 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => { setMobileOpen(false); setFeaturesOpen(false); setMobileFeaturesOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    setMobileOpen(false);
+    setFeaturesOpen(false);
+    setMobileFeaturesOpen(false);
+    setAccountOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     setIsLoggedIn(localStorage.getItem("cellivo_logged_in") === "true");
@@ -102,6 +104,10 @@ const Navbar = () => {
         megaRef.current && !megaRef.current.contains(e.target as Node)
       ) {
         setFeaturesOpen(false);
+      }
+
+      if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
+        setAccountOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -126,10 +132,7 @@ const Navbar = () => {
   const isFeaturePath = allFeaturePaths.includes(location.pathname) || location.pathname === "/features";
 
   return (
-    <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+    <header
       className={`fixed top-0 left-0 right-0 ${
         mobileOpen
           ? "z-[60] bg-white transition-none"
@@ -140,7 +143,7 @@ const Navbar = () => {
     >
       <nav className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
         <Link to="/" className="flex items-center gap-2.5 shrink-0">
-          <img src={cellivoLogo} alt="Cellivo" className="h-7" />
+          <img src={cellivoLogo} alt="Cellivo" width="115" height="24" className="h-7 w-auto" />
         </Link>
 
         {/* Desktop Nav */}
@@ -233,7 +236,7 @@ const Navbar = () => {
                         <p className="text-xs text-muted-foreground/60">
                           Manage your entire phone shop from one platform.
                         </p>
-                        <Link to="/signup">
+                        <Link to="/pricing">
                           <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full text-xs h-7 px-4 font-medium">
                             Start Free Trial →
                           </Button>
@@ -259,35 +262,49 @@ const Navbar = () => {
         </div>
 
         {/* Desktop CTA */}
-        <div className="hidden lg:flex items-center gap-2 shrink-0">
+        <div className="hidden w-[218px] shrink-0 items-center justify-end gap-2 lg:flex">
           {isLoggedIn ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="rounded-full h-9 px-4 text-[13px] font-medium gap-2 border-border/60">
-                  <User size={14} />
-                  Account
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-44">
-                <DropdownMenuItem className="text-sm cursor-pointer" onClick={() => navigate("/account")}>
-                  My Account
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-sm cursor-pointer text-destructive" onClick={handleLogout}>
-                  <LogOut size={14} className="mr-2" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div ref={accountRef} className="relative">
+              <Button
+                variant="outline"
+                className="h-9 w-[112px] rounded-full border-border/60 px-4 text-[13px] font-medium gap-2"
+                aria-expanded={accountOpen}
+                aria-haspopup="menu"
+                onClick={() => setAccountOpen((open) => !open)}
+              >
+                <User size={14} />
+                Account
+              </Button>
+              {accountOpen ? (
+                <div className="absolute right-0 top-11 z-50 w-44 overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md">
+                  <button
+                    type="button"
+                    className="flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
+                    onClick={() => navigate("/account")}
+                  >
+                    My Account
+                  </button>
+                  <div className="-mx-1 my-1 h-px bg-muted" />
+                  <button
+                    type="button"
+                    className="flex w-full cursor-pointer items-center rounded-sm px-2 py-1.5 text-left text-sm text-destructive outline-none transition-colors hover:bg-accent"
+                    onClick={handleLogout}
+                  >
+                    <LogOut size={14} className="mr-2" />
+                    Log out
+                  </button>
+                </div>
+              ) : null}
+            </div>
           ) : (
             <>
-              <Link
-                to="/login"
+              <a
+                href={ACCOUNT_LOGIN_URL}
                 className="text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors px-3 py-1.5"
               >
                 Log in
-              </Link>
-              <Link to="/signup">
+              </a>
+              <Link to="/pricing">
                 <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-5 h-9 text-[13px] rounded-full shadow-sm">
                   Start Free Trial →
                 </Button>
@@ -297,54 +314,26 @@ const Navbar = () => {
         </div>
 
         <button
-          className="lg:hidden relative z-[60] p-2 text-foreground rounded-lg hover:bg-secondary/50 transition-colors"
+          className="lg:hidden relative z-[60] flex h-10 w-10 items-center justify-center text-foreground rounded-lg hover:bg-secondary/50 transition-colors"
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-expanded={mobileOpen}
           aria-label="Toggle menu"
         >
-          <AnimatePresence mode="wait">
-            {mobileOpen ? (
-              <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                <X size={20} />
-              </motion.div>
-            ) : (
-              <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                <Menu size={20} />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {mobileOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
 
       {/* Fullscreen Mobile Menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden fixed inset-0 z-50 bg-white"
-          >
+      {mobileOpen && (
+          <div className="fixed inset-0 z-50 bg-white lg:hidden">
             {/* Header spacer */}
             <div className="h-16" />
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, delay: 0.1 }}
-              className="flex flex-col h-[calc(100vh-4rem)] overflow-y-auto px-6 py-6"
-            >
+            <div className="flex h-[calc(100vh-4rem)] flex-col overflow-y-auto px-6 py-6">
               {/* Nav links with stagger */}
               <div className="flex flex-col gap-1">
-                {navLinks.map((link, i) => (
-                  <motion.div
-                    key={link.path}
-                    initial={{ opacity: 0, x: -30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 30 }}
-                    transition={{ duration: 0.3, delay: i * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  >
+                {navLinks.map((link) => (
+                  <div key={link.path}>
                     {link.mega ? (
                       <div>
                         <button
@@ -352,34 +341,20 @@ const Navbar = () => {
                           className={`w-full flex items-center justify-between px-4 py-3.5 rounded-2xl text-base font-semibold transition-all duration-200 ${
                             isFeaturePath ? "text-foreground bg-secondary/70" : "text-foreground/80 hover:text-foreground hover:bg-secondary/40"
                           }`}
+                          aria-expanded={mobileFeaturesOpen}
                         >
                           {link.label}
-                          <motion.div animate={{ rotate: mobileFeaturesOpen ? 180 : 0 }} transition={{ duration: 0.3 }}>
-                            <ChevronDown size={16} />
-                          </motion.div>
+                          <ChevronDown size={16} className={`transition-transform duration-200 ${mobileFeaturesOpen ? "rotate-180" : ""}`} />
                         </button>
-                        <AnimatePresence>
-                          {mobileFeaturesOpen && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                              className="overflow-hidden"
-                            >
+                        {mobileFeaturesOpen && (
+                            <div className="overflow-hidden">
                               <div className="pl-2 pt-1 pb-2">
                                 <Link to="/features" className="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5 rounded-xl transition-colors">
                                   <BarChart3 size={16} />
                                   All Features →
                                 </Link>
-                                {megaCategories.map((cat, ci) => (
-                                  <motion.div
-                                    key={cat.name}
-                                    initial={{ opacity: 0, y: 8 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: ci * 0.05, duration: 0.25 }}
-                                    className="mt-3"
-                                  >
+                                {megaCategories.map((cat) => (
+                                  <div key={cat.name} className="mt-3">
                                     <p className="px-4 text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50 mb-1.5">{cat.name}</p>
                                     {cat.links.map((item) => (
                                       <Link
@@ -400,12 +375,11 @@ const Navbar = () => {
                                         </div>
                                       </Link>
                                     ))}
-                                  </motion.div>
+                                  </div>
                                 ))}
                               </div>
-                            </motion.div>
+                            </div>
                           )}
-                        </AnimatePresence>
                       </div>
                     ) : (
                       <Link
@@ -419,7 +393,7 @@ const Navbar = () => {
                         {link.label}
                       </Link>
                     )}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
@@ -427,13 +401,7 @@ const Navbar = () => {
               <div className="flex-1 min-h-6" />
 
               {/* Bottom CTA */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.4, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="flex flex-col gap-3 pt-6 border-t border-border/50"
-              >
+              <div className="flex flex-col gap-3 border-t border-border/50 pt-6">
                 {isLoggedIn ? (
                   <>
                     <Link to="/account">
@@ -447,22 +415,21 @@ const Navbar = () => {
                   </>
                 ) : (
                   <>
-                    <Link to="/login">
-                      <Button variant="outline" className="w-full font-semibold h-12 rounded-2xl text-sm border-border/60">Log in</Button>
-                    </Link>
-                    <Link to="/signup">
+                    <Button asChild variant="outline" className="w-full font-semibold h-12 rounded-2xl text-sm border-border/60">
+                      <a href={ACCOUNT_LOGIN_URL}>Log in</a>
+                    </Button>
+                    <Link to="/pricing">
                       <Button className="w-full bg-primary text-primary-foreground font-semibold h-12 rounded-2xl text-sm shadow-sm">
                         Start Free Trial →
                       </Button>
                     </Link>
                   </>
                 )}
-              </motion.div>
-            </motion.div>
-          </motion.div>
+              </div>
+            </div>
+          </div>
         )}
-      </AnimatePresence>
-    </motion.header>
+    </header>
   );
 };
 

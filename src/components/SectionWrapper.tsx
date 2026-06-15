@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "@/components/LightMotion";
 import { ReactNode } from "react";
 
 interface SectionWrapperProps {

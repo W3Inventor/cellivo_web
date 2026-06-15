@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -156,10 +154,280 @@
       0 20px 60px -12px hsl(var(--foreground) / 0.1),
       0 4px 16px -4px hsl(var(--foreground) / 0.06);
   }
+
+  .cellivo-blog-content {
+    overflow-wrap: anywhere;
+    color: hsl(var(--muted-foreground));
+    font-size: 1.0625rem;
+    line-height: 1.85;
+  }
+
+  .cellivo-blog-content > *:first-child {
+    margin-top: 0;
+  }
+
+  .cellivo-blog-content > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .cellivo-blog-content p {
+    margin: 1.15rem 0;
+  }
+
+  .cellivo-blog-content h1,
+  .cellivo-blog-content h2,
+  .cellivo-blog-content h3,
+  .cellivo-blog-content h4,
+  .cellivo-blog-content h5,
+  .cellivo-blog-content h6 {
+    color: hsl(var(--foreground));
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .cellivo-blog-content h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    margin: 2rem 0 1rem;
+  }
+
+  .cellivo-blog-content h2 {
+    border-bottom: 1px solid hsl(var(--border));
+    font-size: clamp(1.55rem, 3vw, 2.1rem);
+    margin: 2.75rem 0 1rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .cellivo-blog-content h3 {
+    font-size: clamp(1.25rem, 2.5vw, 1.6rem);
+    margin: 2rem 0 0.75rem;
+  }
+
+  .cellivo-blog-content h4 {
+    font-size: 1.15rem;
+    margin: 1.75rem 0 0.5rem;
+  }
+
+  .cellivo-blog-content h5 {
+    font-size: 1rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .cellivo-blog-content h6 {
+    color: hsl(var(--primary));
+    font-size: 0.85rem;
+    letter-spacing: 0.16em;
+    margin: 1.5rem 0 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .cellivo-blog-content ul,
+  .cellivo-blog-content ol {
+    margin: 1.25rem 0 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .cellivo-blog-content ul {
+    list-style: disc;
+  }
+
+  .cellivo-blog-content ol {
+    list-style: decimal;
+  }
+
+  .cellivo-blog-content li {
+    margin: 0.5rem 0;
+    padding-left: 0.25rem;
+  }
+
+  .cellivo-blog-content li::marker {
+    color: hsl(var(--primary));
+    font-weight: 700;
+  }
+
+  .cellivo-blog-content a {
+    color: hsl(var(--primary));
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .cellivo-blog-content a:hover {
+    text-decoration: underline;
+  }
+
+  .cellivo-blog-content strong {
+    color: hsl(var(--foreground));
+    font-weight: 700;
+  }
+
+  .cellivo-blog-content blockquote {
+    background: hsl(var(--primary) / 0.06);
+    border-left: 4px solid hsl(var(--primary));
+    border-radius: 1rem;
+    color: hsl(var(--foreground));
+    font-size: 1.05rem;
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .cellivo-blog-content blockquote p {
+    margin: 0.5rem 0;
+  }
+
+  .cellivo-blog-content code {
+    background: hsl(220 14% 96%);
+    border-radius: 0.4rem;
+    color: hsl(var(--foreground));
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15rem 0.4rem;
+  }
+
+  .cellivo-blog-content pre {
+    background: hsl(222 47% 11%);
+    border-radius: 1rem;
+    color: white;
+    margin: 2rem 0;
+    overflow-x: auto;
+    padding: 1.25rem;
+  }
+
+  .cellivo-blog-content pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+
+  .cellivo-blog-content hr {
+    border: 0;
+    border-top: 1px solid hsl(var(--border));
+    margin: 2.5rem 0;
+  }
+
+  .cellivo-blog-content figure {
+    margin: 2rem 0;
+  }
+
+  .cellivo-blog-content figcaption {
+    color: hsl(var(--muted-foreground));
+    font-size: 0.8rem;
+    margin-top: 0.75rem;
+    text-align: center;
+  }
+
+  .cellivo-blog-content > div:not([class]) {
+    margin: 1.5rem 0;
+  }
+
+  .cellivo-blog-content div[style] {
+    max-width: 100%;
+  }
+
+  .cellivo-blog-content table {
+    border-collapse: collapse;
+    display: block;
+    font-size: 0.95rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  .cellivo-blog-content table tbody,
+  .cellivo-blog-content table thead,
+  .cellivo-blog-content table tr {
+    min-width: 100%;
+  }
+
+  .cellivo-blog-content th,
+  .cellivo-blog-content td {
+    border: 1px solid hsl(var(--border));
+    padding: 0.85rem 1rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .cellivo-blog-content th {
+    background: hsl(220 14% 96%);
+    color: hsl(var(--foreground));
+    font-weight: 700;
+  }
+
+  .cellivo-blog-content img {
+    border: 1px solid hsl(var(--border));
+    border-radius: 1rem;
+    height: auto;
+    margin: 2rem auto;
+    max-width: 100%;
+  }
+
+  .cellivo-blog-content iframe,
+  .cellivo-blog-content video {
+    border-radius: 1rem;
+    margin: 2rem 0;
+    max-width: 100%;
+  }
+
+  .cellivo-blog-content .grid,
+  .cellivo-blog-content [style*="grid"] {
+    gap: 1rem;
+  }
+
+  .cellivo-blog-content .callout,
+  .cellivo-blog-content .note {
+    border: 1px solid hsl(var(--primary) / 0.15);
+    border-radius: 1rem;
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+  }
+
+  .cellivo-blog-content .callout {
+    background: hsl(var(--primary) / 0.06);
+  }
+
+  .cellivo-blog-content .note {
+    background: hsl(220 14% 96%);
+  }
+
+  @media (max-width: 640px) {
+    .cellivo-blog-content {
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .cellivo-blog-content h2 {
+      margin-top: 2.25rem;
+    }
+
+    .cellivo-blog-content ul,
+    .cellivo-blog-content ol {
+      padding-left: 1.25rem;
+    }
+  }
 }
 
-@keyframes loading {
-  0% { width: 0; margin-left: 0; }
-  50% { width: 100%; margin-left: 0; }
-  100% { width: 0; margin-left: 100%; }
+@keyframes logo-marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
+
+.logo-marquee-track {
+  animation: logo-marquee 24s linear infinite;
+  will-change: transform;
+}
+
+.logo-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-marquee-track {
+    animation: none;
+  }
 }

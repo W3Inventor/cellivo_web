@@ -2,10 +2,21 @@ import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Check, ArrowLeft, ArrowRight, Mail, Lock, User } from "lucide-react";
-import cellivoLogo from "@/assets/cellivo-logo.png";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Eye, EyeOff, Check, ArrowLeft, ArrowRight, Mail, Lock, User, ChevronDown } from "lucide-react";
+import cellivoLogo from "@/assets/cellivo-logo.webp";
+
+const ACCOUNT_LOGIN_URL = "https://account.cellivo.com/login";
 
 const benefits = [
   "No credit card required",
@@ -19,12 +30,39 @@ const steps = [
   { label: "Password", icon: Lock },
 ];
 
+const countryOptions = [
+  { value: "LK", label: "Sri Lanka", dialCode: "+94", flag: "🇱🇰" },
+  { value: "IN", label: "India", dialCode: "+91", flag: "🇮🇳" },
+  { value: "BD", label: "Bangladesh", dialCode: "+880", flag: "🇧🇩" },
+  { value: "NP", label: "Nepal", dialCode: "+977", flag: "🇳🇵" },
+  { value: "PK", label: "Pakistan", dialCode: "+92", flag: "🇵🇰" },
+  { value: "SG", label: "Singapore", dialCode: "+65", flag: "🇸🇬" },
+  { value: "MY", label: "Malaysia", dialCode: "+60", flag: "🇲🇾" },
+  { value: "TH", label: "Thailand", dialCode: "+66", flag: "🇹🇭" },
+  { value: "AE", label: "United Arab Emirates", dialCode: "+971", flag: "🇦🇪" },
+  { value: "SA", label: "Saudi Arabia", dialCode: "+966", flag: "🇸🇦" },
+  { value: "QA", label: "Qatar", dialCode: "+974", flag: "🇶🇦" },
+  { value: "KW", label: "Kuwait", dialCode: "+965", flag: "🇰🇼" },
+  { value: "OM", label: "Oman", dialCode: "+968", flag: "🇴🇲" },
+  { value: "BH", label: "Bahrain", dialCode: "+973", flag: "🇧🇭" },
+  { value: "GB", label: "United Kingdom", dialCode: "+44", flag: "🇬🇧" },
+  { value: "US", label: "United States", dialCode: "+1", flag: "🇺🇸" },
+  { value: "CA", label: "Canada", dialCode: "+1", flag: "🇨🇦" },
+  { value: "AU", label: "Australia", dialCode: "+61", flag: "🇦🇺" },
+  { value: "NZ", label: "New Zealand", dialCode: "+64", flag: "🇳🇿" },
+  { value: "ZA", label: "South Africa", dialCode: "+27", flag: "🇿🇦" },
+];
+
 const Signup = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
+  const [countryPickerOpen, setCountryPickerOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [selectedCountry, setSelectedCountry] = useState(countryOptions[0].value);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const activeCountry = countryOptions.find((country) => country.value === selectedCountry) ?? countryOptions[0];
 
   const handleOtpChange = (index: number, value: string) => {
     if (value.length > 1) value = value.slice(-1);
@@ -93,7 +131,7 @@ const Signup = () => {
                 </span>
               </div>
               {i < steps.length - 1 && (
-                <div className={`w-16 h-px mx-2 mb-5 transition-colors duration-300 ${
+                <div className={`w-20 h-px mx-2 mb-5 transition-colors duration-300 ${
                   i < currentStep ? "bg-primary" : "bg-border"
                 }`} />
               )}
@@ -102,7 +140,6 @@ const Signup = () => {
         </div>
 
         <div className="bg-background rounded-2xl border border-border p-8 shadow-sm">
-          {/* Step 1: Account info + Social */}
           {currentStep === 0 && (
             <div className="space-y-5">
               {/* Social login */}
@@ -147,6 +184,71 @@ const Signup = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
+                  <Label htmlFor="phoneNumber">Phone number</Label>
+                  <div className="flex h-12 items-center rounded-xl border border-input bg-background transition-all duration-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+                    <Popover open={countryPickerOpen} onOpenChange={setCountryPickerOpen}>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          aria-label="Choose country"
+                          aria-expanded={countryPickerOpen}
+                          className="flex h-full min-w-[72px] shrink-0 items-center justify-center gap-2 rounded-l-xl px-3 text-foreground transition-colors hover:bg-secondary/40 focus-visible:outline-none"
+                        >
+                          <span className="text-xl leading-none">{activeCountry.flag}</span>
+                          <ChevronDown size={14} className="text-muted-foreground" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent align="start" className="w-[320px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Search country or code..." />
+                          <CommandList>
+                            <CommandEmpty>No country found.</CommandEmpty>
+                            <CommandGroup>
+                              {countryOptions.map((country) => (
+                                <CommandItem
+                                  key={country.value}
+                                  value={`${country.label} ${country.dialCode} ${country.value}`}
+                                  onSelect={() => {
+                                    setSelectedCountry(country.value);
+                                    setCountryPickerOpen(false);
+                                  }}
+                                  className="flex items-center gap-3 rounded-none px-3 py-2.5"
+                                >
+                                  <span className="text-xl leading-none">{country.flag}</span>
+                                  <div className="min-w-0 flex-1">
+                                    <p className="truncate text-sm font-medium text-foreground">{country.label}</p>
+                                    <p className="text-xs text-muted-foreground">{country.dialCode}</p>
+                                  </div>
+                                  <Check
+                                    size={16}
+                                    className={selectedCountry === country.value ? "text-primary" : "text-transparent"}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                    <span className="h-6 w-px bg-border" />
+                    <div className="flex min-w-0 flex-1 items-center gap-2 px-3">
+                      <span className="shrink-0 text-sm font-medium text-muted-foreground">
+                        {activeCountry.dialCode}
+                      </span>
+                      <Input
+                        id="phoneNumber"
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        placeholder="Phone Number"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="h-full border-0 px-0 py-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input id="email" type="email" placeholder="you@example.com" />
                 </div>
@@ -158,7 +260,6 @@ const Signup = () => {
             </div>
           )}
 
-          {/* Step 2: OTP Verification */}
           {currentStep === 1 && (
             <div className="space-y-6">
               <div className="text-center">
@@ -205,7 +306,6 @@ const Signup = () => {
             </div>
           )}
 
-          {/* Step 3: Password */}
           {currentStep === 2 && (
             <div className="space-y-5">
               <div className="text-center">
@@ -252,7 +352,6 @@ const Signup = () => {
             </div>
           )}
 
-          {/* Benefits — only on step 1 */}
           {currentStep === 0 && (
             <div className="mt-6 pt-5 border-t border-border">
               <div className="flex flex-col gap-2">
@@ -269,7 +368,7 @@ const Signup = () => {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Already have an account?{" "}
-          <Link to="/login" className="text-primary font-medium hover:underline">Sign in</Link>
+          <a href={ACCOUNT_LOGIN_URL} className="text-primary font-medium hover:underline">Sign in</a>
         </p>
       </div>
     </div>

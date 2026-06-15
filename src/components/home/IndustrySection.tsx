@@ -1,5 +1,5 @@
 import SectionWrapper from "@/components/SectionWrapper";
-import { motion } from "framer-motion";
+import { motion } from "@/components/LightMotion";
 import { Link } from "react-router-dom";
 import { Smartphone, Wrench, Headphones, Building2, Cpu, ArrowRight } from "lucide-react";
 
@@ -36,7 +36,7 @@ const IndustrySection = () => (
           </div>
           <h3 className="font-heading font-semibold text-foreground mb-2">{item.title}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed mb-4 flex-1">{item.desc}</p>
-          <Link to="/contact" className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors">
+          <Link to="/pricing" className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:text-primary/80 transition-colors">
             {item.cta} <ArrowRight size={12} />
           </Link>
         </motion.div>

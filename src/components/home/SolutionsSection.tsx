@@ -1,5 +1,5 @@
 import SectionWrapper from "@/components/SectionWrapper";
-import { motion } from "framer-motion";
+import { motion } from "@/components/LightMotion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, Hash, Wrench, Package, BarChart3, Zap, RefreshCw, Heart, ArrowRight } from "lucide-react";
@@ -45,7 +45,7 @@ const SolutionsSection = () => (
     </div>
 
     <div className="text-center mt-12 space-y-3">
-      <Link to="/contact">
+      <Link to="/pricing">
         <Button className="bg-foreground text-background hover:bg-foreground/90 font-medium px-8 h-12 rounded-xl text-sm">
           Start Free <ArrowRight className="ml-2" size={15} />
         </Button>

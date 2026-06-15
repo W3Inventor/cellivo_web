@@ -16,11 +16,11 @@ const Solutions = () => (
   <Layout>
     <section className="pt-32 pb-16">
       <div className="container mx-auto px-4 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
+        <div className="max-w-3xl">
           <span className="section-header-label">Solutions</span>
           <h1 className="text-4xl md:text-5xl font-heading font-bold mt-3 mb-6 text-foreground">Tailored for <span className="text-primary">Every Phone Business</span></h1>
           <p className="text-lg text-muted-foreground leading-relaxed">Our POS adapts to your specific needs — start free and see for yourself.</p>
-        </motion.div>
+        </div>
       </div>
     </section>
     <SectionWrapper>

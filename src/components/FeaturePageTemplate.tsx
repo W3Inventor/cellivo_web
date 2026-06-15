@@ -1,11 +1,15 @@
 import Layout from "@/components/Layout";
+import FeatureHero from "@/components/FeatureHero";
+import FeatureHubLinkSection from "@/components/FeatureHubLinkSection";
 import SEOHead from "@/components/SEOHead";
 import SectionWrapper from "@/components/SectionWrapper";
+import WhyThisMattersSection from "@/components/WhyThisMattersSection";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, CheckCircle2, CreditCard, Zap, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { LucideIcon } from "lucide-react";
+import { BreadcrumbItem } from "@/lib/seo";
 
 interface Benefit {
   icon: LucideIcon;
@@ -17,51 +21,72 @@ interface FeaturePageProps {
   seoTitle: string;
   seoDescription: string;
   canonical: string;
+  breadcrumbs?: BreadcrumbItem[];
   badge: string;
+  painHook: string[];
   headline: string;
   highlightedText: string;
   subheadline: string;
+  whyThisMatters: { problem: string; solution: string };
+  primaryCtaLabel?: string;
+  secondaryCtaLabel?: string;
+  trustItems?: { value: string; label: string }[];
   benefits: Benefit[];
   howItWorks: { step: string; title: string; desc: string }[];
   relatedLinks: { label: string; path: string }[];
+  faqItems?: { q: string; a: string }[];
 }
 
 const FeaturePageTemplate = ({
-  seoTitle, seoDescription, canonical, badge, headline, highlightedText,
-  subheadline, benefits, howItWorks, relatedLinks,
+  seoTitle, seoDescription, canonical, breadcrumbs, badge, painHook, headline, highlightedText,
+  subheadline, whyThisMatters, primaryCtaLabel = "Start Free Trial",
+  secondaryCtaLabel = "Book a Demo", trustItems = [], benefits, howItWorks, relatedLinks, faqItems = [],
 }: FeaturePageProps) => (
   <Layout>
-    <SEOHead title={seoTitle} description={seoDescription} canonical={canonical} />
+    <SEOHead
+      title={seoTitle}
+      description={seoDescription}
+      canonical={canonical}
+      breadcrumbs={breadcrumbs}
+      structuredData={
+        faqItems.length
+          ? {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: faqItems.map((faq) => ({
+                "@type": "Question",
+                name: faq.q,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: faq.a,
+                },
+              })),
+            }
+          : undefined
+      }
+    />
 
-    {/* Hero */}
-    <section className="pt-32 pb-16 md:pt-40 md:pb-20">
-      <div className="container mx-auto px-4 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
-          <span className="section-header-label">{badge}</span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold mt-3 mb-6 text-foreground leading-[1.1]">
-            {headline} <span className="text-primary">{highlightedText}</span>
-          </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-8">{subheadline}</p>
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <Link to="/signup">
-              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-8 h-12 rounded-xl text-sm">
-                Start Free Trial <ArrowRight className="ml-2" size={16} />
-              </Button>
-            </Link>
-            <Link to="/contact">
-              <Button variant="outline" className="font-medium px-8 h-12 rounded-xl text-sm">
-                Book a Demo
-              </Button>
-            </Link>
-          </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5"><CreditCard size={13} /> No credit card required</span>
-            <span className="flex items-center gap-1.5"><Zap size={13} /> Instant access</span>
-            <span className="flex items-center gap-1.5"><ShieldCheck size={13} /> Cancel anytime</span>
-          </div>
-        </motion.div>
-      </div>
-    </section>
+    <FeatureHero
+      badge={badge}
+      painHook={painHook}
+      title={
+        <>
+          {headline} <span className="text-primary">{highlightedText}</span>
+        </>
+      }
+      supportText={subheadline}
+      primaryCtaLabel={primaryCtaLabel}
+      primaryCtaTo="/pricing"
+      secondaryCtaLabel={secondaryCtaLabel}
+      trustItems={trustItems}
+    />
+
+    <FeatureHubLinkSection />
+
+    <WhyThisMattersSection
+      problemText={whyThisMatters.problem}
+      solutionText={whyThisMatters.solution}
+    />
 
     {/* Benefits */}
     <SectionWrapper className="bg-secondary/40">
@@ -117,6 +142,28 @@ const FeaturePageTemplate = ({
       </div>
     </SectionWrapper>
 
+    {faqItems.length ? (
+      <SectionWrapper className="bg-secondary/40">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <span className="section-header-label">FAQ</span>
+            <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mt-3 mb-5">
+              Common Questions
+            </h2>
+            <div className="premium-divider" />
+          </div>
+          <div className="space-y-4">
+            {faqItems.map((faq) => (
+              <div key={faq.q} className="rounded-2xl border border-border bg-white px-6 py-5 shadow-sm">
+                <h3 className="font-heading font-semibold text-foreground mb-2">{faq.q}</h3>
+                <div className="faq-answer text-sm md:text-base text-muted-foreground leading-relaxed">{faq.a}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </SectionWrapper>
+    ) : null}
+
     {/* CTA */}
     <section className="py-20 md:py-28">
       <div className="container mx-auto px-4">
@@ -128,7 +175,7 @@ const FeaturePageTemplate = ({
             Join 500+ phone shop owners who run their entire business on Cellivo.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/signup">
+            <Link to="/pricing">
               <Button size="lg" className="rounded-xl font-medium px-8 bg-white text-foreground hover:bg-white/90">
                 Start Free Trial <ArrowRight className="ml-2" size={16} />
               </Button>

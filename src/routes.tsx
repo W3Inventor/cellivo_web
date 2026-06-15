@@ -1,4 +1,4 @@
 import { useRoutes } from "react-router-dom";
-import { appRoutes } from "./route-config";
+import type { RouteObject } from "react-router-dom";
 
-export const AppRoutes = () => useRoutes(appRoutes);
+export const AppRoutes = ({ routes }: { routes: RouteObject[] }) => useRoutes(routes);

@@ -1,38 +1,32 @@
-import { useState } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
-import SEOHead from "@/components/SEOHead";
+import type { RouteObject } from "react-router-dom";
 import { SiteUrlProvider } from "@/contexts/SiteUrlContext";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { InitialDataProvider } from "@/contexts/InitialDataContext";
+import { AdminAuthProvider } from "@/contexts/AdminAuthContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import { AppRoutes } from "./routes";
+import type { BlogInitialDataPayload } from "@/lib/blog";
 
 interface AppProps {
   helmetContext?: object;
-  queryClient?: QueryClient;
+  routes?: RouteObject[];
   siteUrl?: string;
+  initialData?: BlogInitialDataPayload;
 }
 
-const App = ({ helmetContext, queryClient, siteUrl }: AppProps) => {
-  const [client] = useState(() => queryClient ?? new QueryClient());
-
+const App = ({ helmetContext, routes, siteUrl, initialData }: AppProps) => {
   return (
     <HelmetProvider context={helmetContext}>
       <SiteUrlProvider siteUrl={siteUrl}>
-        <QueryClientProvider client={client}>
-          <TooltipProvider>
-            <SEOHead
-              title="Cellivo — Mobile Shop POS System with IMEI-Based Stock Control & Repair Management"
-              description="All-in-one POS software for phone shops to manage sales, inventory, repairs, and staff. IMEI-based stock control, billing, multi-branch support. Start your free trial today."
-            />
-            <Toaster />
-            <Sonner />
+        <InitialDataProvider initialData={initialData}>
+          <AdminAuthProvider>
             <ScrollToTop />
-            <AppRoutes />
-          </TooltipProvider>
-        </QueryClientProvider>
+            <Suspense fallback={null}>
+              <AppRoutes routes={routes ?? []} />
+            </Suspense>
+          </AdminAuthProvider>
+        </InitialDataProvider>
       </SiteUrlProvider>
     </HelmetProvider>
   );

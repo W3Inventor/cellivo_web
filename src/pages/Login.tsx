@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, ArrowLeft } from "lucide-react";
-import cellivoLogo from "@/assets/cellivo-logo.png";
+import cellivoLogo from "@/assets/cellivo-logo.webp";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -97,7 +97,7 @@ const Login = () => {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-primary font-medium hover:underline">Create one free</Link>
+          <Link to="/pricing" className="text-primary font-medium hover:underline">Create one free</Link>
         </p>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import DemoBookingButton from "@/components/DemoBookingButton";
 import SEOHead from "@/components/SEOHead";
 import SectionWrapper from "@/components/SectionWrapper";
 import { motion } from "framer-motion";
@@ -19,43 +20,69 @@ const challenges = [
 ];
 
 const solutions = [
-  { icon: Receipt, title: "Fast POS Billing", desc: "Create invoices in 30 seconds with auto-tax, discounts, and multiple payment methods.", link: "/pos-billing-system" },
-  { icon: Hash, title: "IMEI Stock Control", desc: "Every phone gets an IMEI record the moment it enters your shop. Full traceability.", link: "/imei-tracking-pos" },
+  { icon: Receipt, title: "Fast POS Billing", desc: "Create invoices in 30 seconds with auto-tax, discounts, and multiple payment methods.", link: "/billing-software-for-mobile-shop" },
+  { icon: Hash, title: "IMEI Stock Control", desc: "Every phone gets an IMEI record the moment it enters your shop. Full traceability.", link: "/imei-tracking-pos-system" },
   { icon: Wrench, title: "Repair Management", desc: "Log repairs, assign technicians, track parts, and notify customers automatically.", link: "/mobile-repair-management-software" },
   { icon: Package, title: "Inventory Control", desc: "Track phones, accessories, and spare parts with low-stock alerts.", link: "/inventory-management-system" },
-  { icon: Building2, title: "Multi-Branch", desc: "Manage all your locations from one centralized dashboard.", link: "/multi-branch-pos" },
-  { icon: BarChart3, title: "Profit Analytics", desc: "See profit margins per phone, per accessory, per repair, per day.", link: "/pos-billing-system" },
+  { icon: Building2, title: "Multi-Branch", desc: "Manage all your locations from one centralized dashboard.", link: "/multi-branch-pos-system" },
+  { icon: BarChart3, title: "Profit Analytics", desc: "See profit margins per phone, per accessory, per repair, per day.", link: "/billing-software-for-mobile-shop" },
 ];
 
 const PosForMobileShops = () => (
   <Layout>
     <SEOHead
-      title="POS System for Mobile Phone Shops | Cellivo"
-      description="Cellivo is the POS system built specifically for mobile phone shops. Manage IMEI-based stock control, repairs, accessories inventory, billing, and multi-branch operations — all in one platform."
-      canonical="https://cellivo.lovable.app/pos-for-mobile-shops"
+      title="POS for Small Mobile Shops | Billing & Inventory Software"
+      description="POS for small mobile shops with fast billing, IMEI tracking, repairs, inventory control, and simple tools for owners who need easier daily control."
+      canonical="https://cellivo.com/pos-for-mobile-shops"
+      structuredData={{
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        name: "Cellivo",
+        applicationCategory: "BusinessApplication",
+        operatingSystem: "Web",
+        description:
+          "POS for small mobile shops with billing, IMEI stock control, repair management, accessories inventory, and simple growth tools.",
+        url: "https://cellivo.com/pos-for-mobile-shops",
+      }}
+      breadcrumbs={[
+        { name: "Home", path: "/" },
+        { name: "Mobile Shop POS System", path: "/mobile-shop-pos-system" },
+        { name: "POS for Small Mobile Shops", path: "/pos-for-mobile-shops" },
+      ]}
     />
 
     <section className="pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-secondary/50 to-background">
       <div className="container mx-auto px-4 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
-          <span className="section-header-label">For Mobile Phone Shops</span>
+        <div className="max-w-3xl">
+          <span className="section-header-label">For Small Mobile Shops</span>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold mt-3 mb-6 text-foreground leading-[1.1]">
-            The POS System Built for <span className="text-primary">Mobile Phone Shops</span>
+            POS for <span className="text-primary">Small Mobile Shops</span> That Need Simpler Control
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-            Phone shops have unique needs — IMEI-based stock control, repair workflows, accessory management. Generic POS systems don't understand your business. Cellivo does.
+            Small mobile shops need fast billing, IMEI control, and repair tracking without complex setup. Cellivo keeps daily operations simple for owner-led stores from day one.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <Link to="/signup">
+            <Link to="/pricing">
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-8 h-12 rounded-xl text-sm">
                 Start Free Trial <ArrowRight className="ml-2" size={16} />
               </Button>
             </Link>
-            <Link to="/contact">
-              <Button variant="outline" className="font-medium px-8 h-12 rounded-xl text-sm">Book a Demo</Button>
-            </Link>
+            <DemoBookingButton variant="outline" className="font-medium px-8 h-12 rounded-xl text-sm">
+              Book a Demo
+            </DemoBookingButton>
           </div>
-        </motion.div>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+            Start with the essentials now, then grow into the full{" "}
+            <Link to="/mobile-shop-pos-system" className="text-primary hover:underline">
+              mobile shop POS system
+            </Link>{" "}
+            or a faster{" "}
+            <Link to="/pos-system-for-phone-shop" className="text-primary hover:underline">
+              POS system for phone shop
+            </Link>{" "}
+            checkout workflow when your counter gets busier.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -65,10 +92,14 @@ const PosForMobileShops = () => (
         <div>
           <span className="section-header-label">The Challenge</span>
           <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground mb-6">
-            Mobile Phone Shops Face Unique Challenges
+            Small Mobile Shops Face Unique Daily Pressure
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Unlike general retail, phone shops deal with high-value serialized products, repair services, and fast-moving accessories — all at the same time.
+            Unlike generic retail, smaller phone shops still manage high-value devices, repair intake, and fast-moving accessories without extra staff or time to waste. This page focuses on simpler daily control for compact teams, while the broader{" "}
+            <Link to="/mobile-shop-pos-system" className="text-primary hover:underline">
+              mobile shop POS system
+            </Link>{" "}
+            covers the full operational stack as you scale.
           </p>
           <ul className="space-y-3">
             {challenges.map((c) => (
@@ -82,10 +113,14 @@ const PosForMobileShops = () => (
         <div className="bg-secondary/40 border border-border rounded-2xl p-8">
           <div className="flex items-center gap-3 mb-4">
             <Smartphone size={24} className="text-primary" />
-            <h3 className="font-heading font-semibold text-foreground text-lg">Cellivo Solves All of This</h3>
+            <h3 className="font-heading font-semibold text-foreground text-lg">Cellivo Keeps It Manageable</h3>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-            One system that handles everything a mobile phone shop needs — from the moment a phone enters your inventory to the moment it's sold with a receipt in the customer's hand.
+            One system that handles billing, stock, repairs, and customer history without forcing a small team to juggle disconnected tools or jump into a more advanced{" "}
+            <Link to="/pos-system-for-phone-shop" className="text-primary hover:underline">
+              POS system for phone shop
+            </Link>{" "}
+            setup before they are ready.
           </p>
           <div className="flex items-center gap-2 text-sm text-primary font-medium">
             <ShieldCheck size={14} />
@@ -122,11 +157,11 @@ const PosForMobileShops = () => (
       <div className="container mx-auto px-4">
         <div className="bg-foreground rounded-2xl p-10 md:p-16 text-center max-w-3xl mx-auto">
           <h2 className="text-2xl md:text-4xl font-heading font-bold text-white mb-4">
-            Ready to Run Your Phone Shop Smarter?
+            Ready to Run Your Small Mobile Shop Smarter?
           </h2>
           <p className="text-white/50 mb-8 max-w-lg mx-auto">Start free today and see how Cellivo transforms your daily operations.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link to="/signup">
+            <Link to="/pricing">
               <Button size="lg" className="rounded-xl font-medium px-8 bg-white text-foreground hover:bg-white/90">
                 Start Free Trial <ArrowRight className="ml-2" size={16} />
               </Button>

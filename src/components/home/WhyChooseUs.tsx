@@ -1,5 +1,5 @@
 import SectionWrapper from "@/components/SectionWrapper";
-import { motion } from "framer-motion";
+import { motion } from "@/components/LightMotion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Target, Puzzle, ThumbsUp, ShieldCheck, Headphones, TrendingUp, Sparkles, ArrowRight } from "lucide-react";

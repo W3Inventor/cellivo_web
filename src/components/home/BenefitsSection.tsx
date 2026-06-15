@@ -1,20 +1,20 @@
 import SectionWrapper from "@/components/SectionWrapper";
-import { motion } from "framer-motion";
+import { motion } from "@/components/LightMotion";
 import { Clock, ShieldCheck, TrendingUp, Star } from "lucide-react";
 
 const benefits = [
-  { icon: Clock, title: "Save 2+ Hours Daily", desc: "Automated billing, inventory tracking, and reporting eliminate manual work so you can focus on customers." },
-  { icon: ShieldCheck, title: "Reduce Errors to Zero", desc: "Auto-calculated taxes, IMEI verification, and digital records eliminate human mistakes." },
-  { icon: TrendingUp, title: "Increase Sales by 15%+", desc: "Better stock management, faster checkout, and customer loyalty drive more revenue." },
-  { icon: Star, title: "Professional Experience", desc: "Instant receipts, repair notifications, and loyalty rewards impress every customer." },
+  { icon: Clock, title: "Save Hours Every Day", desc: "Automate billing, stock updates, and reporting so your team spends less time on admin work." },
+  { icon: ShieldCheck, title: "Reduce Costly Mistakes", desc: "Use digital billing, IMEI records, and controlled pricing to reduce errors." },
+  { icon: TrendingUp, title: "Grow Sales with Better Control", desc: "Speed up checkout, avoid stockouts, and deliver a better customer experience." },
+  { icon: Star, title: "Look More Professional", desc: "Give customers printed invoices, repair updates, and a more organized service experience." },
 ];
 
 const BenefitsSection = () => (
   <SectionWrapper>
     <div className="text-center mb-12 md:mb-16">
-      <span className="section-header-label">Why It Matters</span>
+      <span className="section-header-label">Why Cellivo</span>
       <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-5 leading-[1.1]">
-        Real Benefits for <span className="text-primary">Your Business</span>
+        Why Phone Shops <span className="text-primary">Choose Cellivo</span>
       </h2>
       <div className="premium-divider" />
     </div>

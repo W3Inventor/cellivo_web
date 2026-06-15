@@ -1,30 +1,38 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import cellivoLogo from "@/assets/cellivo-logo.png";
+import cellivoLogo from "@/assets/cellivo-logo.webp";
+import {
+  BUSINESS_ADDRESS_DISPLAY,
+  BUSINESS_EMAIL,
+  BUSINESS_PHONE_DISPLAY,
+  BUSINESS_PHONE_RAW,
+} from "@/lib/business-info";
 
 const quickLinks = [
   { label: "Home", path: "/" },
   { label: "About Us", path: "/about" },
   { label: "Pricing", path: "/pricing" },
+  { label: "Affiliate Program", path: "/affiliate" },
   { label: "Contact", path: "/contact" },
   { label: "Support", path: "https://support.cellivo.com/", external: true },
   { label: "All Features", path: "/features" },
 ];
 
 const featureLinks = [
-  { label: "POS Billing System", path: "/pos-billing-system" },
-  { label: "IMEI Stock Control", path: "/imei-tracking-pos" },
+  { label: "POS Billing System", path: "/billing-software-for-mobile-shop" },
+  { label: "IMEI Stock Control", path: "/imei-tracking-pos-system" },
   { label: "Inventory Management", path: "/inventory-management-system" },
   { label: "Repair Management", path: "/mobile-repair-management-software" },
-  { label: "Multi-Branch POS", path: "/multi-branch-pos" },
+  { label: "Multi-Branch POS", path: "/multi-branch-pos-system" },
   { label: "Cash Drawer", path: "/cash-drawer-management" },
   { label: "Customer Loyalty", path: "/customer-loyalty-system" },
 ];
 
 const industryLinks = [
   { label: "Mobile Shop POS", path: "/mobile-shop-pos-system" },
-  { label: "POS for Mobile Shops", path: "/pos-for-mobile-shops" },
+  { label: "POS for Phone Shops", path: "/pos-system-for-phone-shop" },
+  { label: "POS for Small Mobile Shops", path: "/pos-for-mobile-shops" },
   { label: "POS System Sri Lanka", path: "/pos-system-sri-lanka" },
 ];
 
@@ -35,12 +43,12 @@ const Footer = () => (
         {/* Brand */}
         <div className="lg:col-span-1">
           <div className="flex items-center gap-2.5 mb-4">
-            <img src={cellivoLogo} alt="Cellivo" className="h-6" />
+            <img src={cellivoLogo} alt="Cellivo" width="115" height="24" className="h-6 w-auto" />
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed mb-5">
             The POS system built exclusively for phone shops, repair centers, and mobile retailers.
           </p>
-          <Link to="/signup">
+          <Link to="/pricing">
             <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-4 h-9 rounded-lg text-xs">
               Start Free Trial <ArrowRight className="ml-1.5" size={12} />
             </Button>
@@ -49,7 +57,7 @@ const Footer = () => (
 
         {/* Quick Links */}
         <div>
-          <h4 className="font-heading font-semibold text-foreground mb-4 text-sm">Quick Links</h4>
+          <h2 className="font-heading font-semibold text-foreground mb-4 text-sm">Quick Links</h2>
           <ul className="space-y-2.5">
             {quickLinks.map((l) => (
               <li key={l.path}>
@@ -65,7 +73,7 @@ const Footer = () => (
 
         {/* Features */}
         <div>
-          <h4 className="font-heading font-semibold text-foreground mb-4 text-sm">Features</h4>
+          <h2 className="font-heading font-semibold text-foreground mb-4 text-sm">Features</h2>
           <ul className="space-y-2.5">
             {featureLinks.map((l) => (
               <li key={l.path}>
@@ -77,7 +85,7 @@ const Footer = () => (
 
         {/* Industries */}
         <div>
-          <h4 className="font-heading font-semibold text-foreground mb-4 text-sm">Industries</h4>
+          <h2 className="font-heading font-semibold text-foreground mb-4 text-sm">Industries</h2>
           <ul className="space-y-2.5">
             {industryLinks.map((l) => (
               <li key={l.path}>
@@ -89,11 +97,24 @@ const Footer = () => (
 
         {/* Contact */}
         <div>
-          <h4 className="font-heading font-semibold text-foreground mb-4 text-sm">Contact</h4>
+          <h2 className="font-heading font-semibold text-foreground mb-4 text-sm">Contact</h2>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-center gap-2"><Mail size={14} className="text-muted-foreground/60" /> hello@cellivo.com</li>
-            <li className="flex items-center gap-2"><Phone size={14} className="text-muted-foreground/60" /> +1 (555) 000-0000</li>
-            <li className="flex items-center gap-2"><MapPin size={14} className="text-muted-foreground/60" /> Business District, City</li>
+            <li className="flex items-start gap-2">
+              <Mail size={14} className="text-muted-foreground/60 mt-0.5 shrink-0" />
+              <a href={`mailto:${BUSINESS_EMAIL}`} className="hover:text-foreground transition-colors">
+                {BUSINESS_EMAIL}
+              </a>
+            </li>
+            <li className="flex items-start gap-2">
+              <Phone size={14} className="text-muted-foreground/60 mt-0.5 shrink-0" />
+              <a href={`tel:${BUSINESS_PHONE_RAW}`} className="hover:text-foreground transition-colors">
+                {BUSINESS_PHONE_DISPLAY}
+              </a>
+            </li>
+            <li className="flex items-start gap-2">
+              <MapPin size={14} className="text-muted-foreground/60 mt-0.5 shrink-0" />
+              <span>{BUSINESS_ADDRESS_DISPLAY}</span>
+            </li>
           </ul>
         </div>
       </div>

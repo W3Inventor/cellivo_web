@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "@/components/LightMotion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -27,16 +27,21 @@ const ParallaxShowcase = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="text-center mb-12 md:mb-20">
           <span className="section-header-label">See It in Action</span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-5 leading-[1.1]">
-            Your Entire Shop on <span className="text-primary">One Screen</span>
+            One Dashboard for Billing, Inventory, <span className="text-primary">Repairs, and IMEI Tracking</span>
           </h2>
           <div className="premium-divider" />
           <p className="text-muted-foreground max-w-2xl mx-auto text-sm md:text-lg">
-            Sales, stock, repairs, invoices, and IMEI-based stock control — everything works the moment you sign up.
+            From the first sale to the final repair pickup, Cellivo gives phone shop owners one place to manage operations, monitor stock, and track profit in real time.
           </p>
         </motion.div>
 
         {/* Desktop parallax */}
-        <motion.div style={{ opacity }} className="hidden md:block relative max-w-5xl mx-auto h-[640px]">
+        <motion.div
+          style={{ opacity }}
+          className="hidden md:block relative max-w-5xl mx-auto h-[640px]"
+          role="img"
+          aria-label="IMEI tracking and repair workflow dashboard for phone shops"
+        >
           <div className="absolute inset-x-0 top-0 mx-auto w-full max-w-3xl" style={{ perspective: "1200px" }}>
             <motion.div style={{ y: yDashboard, scale: dashboardScale, rotateX: dashboardRotate }} className="origin-bottom">
               <div className="bg-white border border-border rounded-2xl shadow-xl shadow-black/[0.04] p-1">
@@ -59,7 +64,7 @@ const ParallaxShowcase = () => {
                       <div key={kpi.label} className="bg-secondary/60 rounded-xl p-3.5">
                         <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{kpi.label}</span>
                         <p className="text-lg font-semibold text-foreground mt-1">{kpi.value}</p>
-                        <span className="text-[10px] text-green-600 font-medium">{kpi.change}</span>
+                        <span className="text-[10px] text-green-700 font-medium">{kpi.change}</span>
                       </div>
                     ))}
                   </div>
@@ -79,7 +84,7 @@ const ParallaxShowcase = () => {
             <div className="bg-white border border-border rounded-xl p-4 shadow-lg shadow-black/[0.04]">
               <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-medium text-foreground">Invoice #2847</p>
-                <span className="text-[9px] px-2 py-0.5 rounded-full bg-green-50 text-green-600 font-medium">Paid</span>
+                <span className="text-[9px] px-2 py-0.5 rounded-full bg-green-50 text-green-700 font-medium">Paid</span>
               </div>
               <div className="space-y-2 text-xs text-muted-foreground">
                 <div className="flex justify-between"><span>iPhone 15 Pro</span><span className="text-foreground/70">$1,199</span></div>
@@ -99,7 +104,7 @@ const ParallaxShowcase = () => {
               </div>
               <div className="space-y-1.5 text-xs text-muted-foreground">
                 <div className="flex justify-between"><span>Device</span><span className="text-foreground/70">Galaxy S24 Ultra</span></div>
-                <div className="flex justify-between"><span>Status</span><span className="text-amber-600 font-medium">In Progress</span></div>
+                <div className="flex justify-between"><span>Status</span><span className="text-amber-700 font-medium">In Progress</span></div>
               </div>
               <div className="mt-3 w-full bg-secondary rounded-full h-1.5">
                 <div className="bg-amber-400 h-1.5 rounded-full" style={{ width: "65%" }} />
@@ -113,7 +118,7 @@ const ParallaxShowcase = () => {
               <p className="text-xs font-mono text-primary">354832091847562</p>
               <div className="flex items-center gap-1.5 mt-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                <p className="text-[11px] text-green-600 font-medium">Clean — Ready to sell</p>
+                <p className="text-[11px] text-green-700 font-medium">Clean — Ready to sell</p>
               </div>
             </div>
           </motion.div>
@@ -124,11 +129,11 @@ const ParallaxShowcase = () => {
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-foreground/70">USB-C Cables</span>
-                  <span className="text-amber-600 font-medium">3 left</span>
+                  <span className="text-amber-700 font-medium">3 left</span>
                 </div>
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-foreground/70">AirPods Pro</span>
-                  <span className="text-red-500 font-medium">Out</span>
+                  <span className="text-red-600 font-medium">Out</span>
                 </div>
               </div>
             </div>
@@ -160,7 +165,7 @@ const ParallaxShowcase = () => {
         </motion.div>
 
         {/* Mobile */}
-        <div className="md:hidden space-y-4">
+        <div className="md:hidden space-y-4" role="img" aria-label="IMEI tracking and repair workflow dashboard for phone shops">
           <motion.div style={{ y: yMobileDash }}>
             <div className="bg-white border border-border rounded-2xl shadow-sm p-1">
               <div className="rounded-xl p-4">
@@ -180,7 +185,7 @@ const ParallaxShowcase = () => {
                     <div key={kpi.label} className="bg-secondary/60 rounded-lg p-3">
                       <span className="text-[9px] text-muted-foreground uppercase tracking-wider">{kpi.label}</span>
                       <p className="text-base font-semibold text-foreground mt-1">{kpi.value}</p>
-                      <span className="text-[9px] text-green-600 font-medium">{kpi.change}</span>
+                      <span className="text-[9px] text-green-700 font-medium">{kpi.change}</span>
                     </div>
                   ))}
                 </div>
@@ -200,7 +205,7 @@ const ParallaxShowcase = () => {
               <div className="bg-white border border-border rounded-xl p-3 shadow-sm">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-[11px] font-medium text-foreground">Invoice #2847</p>
-                  <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-green-50 text-green-600 font-medium">Paid</span>
+                  <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-green-50 text-green-700 font-medium">Paid</span>
                 </div>
                 <div className="border-t border-border pt-2 flex justify-between font-medium text-foreground text-xs">
                   <span>Total</span><span className="text-primary">$1,277</span>
@@ -222,9 +227,9 @@ const ParallaxShowcase = () => {
         </div>
 
         <div className="text-center mt-10">
-          <Link to="/contact">
+          <Link to="/pricing">
             <Button className="w-full sm:w-auto bg-foreground text-background hover:bg-foreground/90 font-medium px-8 h-12 rounded-xl text-sm">
-              Try It Free <ArrowRight className="ml-2" size={15} />
+              Start Free Trial <ArrowRight className="ml-2" size={15} />
             </Button>
           </Link>
           <p className="text-xs text-muted-foreground mt-3">No credit card required. Start in minutes.</p>

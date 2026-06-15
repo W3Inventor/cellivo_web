@@ -1,12 +1,28 @@
 import SectionWrapper from "@/components/SectionWrapper";
-import { motion } from "framer-motion";
+import { motion } from "@/components/LightMotion";
 import { AlertTriangle, Clock, Wrench, Package } from "lucide-react";
 
 const problems = [
-  { icon: AlertTriangle, title: "Hard to Track IMEI Numbers", desc: "Phones get mixed up, lost, or sold without proper records. You can't trace which phone went to which customer." },
-  { icon: Clock, title: "Manual Billing Wastes Time", desc: "Hand-written invoices, manual tax calculations, and pricing errors cost you time and money every day." },
-  { icon: Wrench, title: "Repair Jobs Get Lost", desc: "Customers call asking about repair status, and you can't find the ticket. Repairs fall through the cracks." },
-  { icon: Package, title: "No Stock Visibility", desc: "You don't know what's in stock until you physically check. Accessories run out without warning." },
+  {
+    icon: AlertTriangle,
+    title: "Hard to Track IMEI and Serial Numbers",
+    desc: "Phones get mixed up, sold without proper records, or returned without traceability. A phone shop needs accurate IMEI and serial tracking.",
+  },
+  {
+    icon: Clock,
+    title: "Billing Is Slow and Error-Prone",
+    desc: "Manual billing, price overrides, and payment mistakes slow your front desk and reduce customer trust.",
+  },
+  {
+    icon: Wrench,
+    title: "Repair Jobs Become Difficult to Manage",
+    desc: "Without a proper repair management system, tickets get delayed, parts are missed, and customers keep calling for updates.",
+  },
+  {
+    icon: Package,
+    title: "Stock Visibility Is Poor",
+    desc: "Many shops do not know what is in stock, what is low, or which items are moving fastest until it is too late.",
+  },
 ];
 
 const ProblemSection = () => (
@@ -14,11 +30,11 @@ const ProblemSection = () => (
     <div className="text-center mb-12 md:mb-16">
       <span className="section-header-label">The Problem</span>
       <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-5 leading-[1.1]">
-        Running a Phone Shop <span className="text-primary">Shouldn't Be This Hard</span>
+        Why Phone Shops Outgrow <span className="text-primary">Generic POS Software</span>
       </h2>
       <div className="premium-divider" />
       <p className="section-header-desc">
-        Most phone shop owners struggle with these daily challenges. Sound familiar?
+        Most mobile phone shops start with spreadsheets, handwritten bills, or generic billing tools. But once you manage phones, accessories, IMEI numbers, repairs, and staff, those systems break down fast.
       </p>
     </div>
 

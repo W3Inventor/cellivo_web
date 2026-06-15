@@ -4,6 +4,7 @@ import FinalCTA from "@/components/home/FinalCTA";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import { motion } from "framer-motion";
 import { Target, Puzzle, ThumbsUp, ShieldCheck, Headphones, TrendingUp, Sparkles, Users } from "lucide-react";
+import { useInitialData } from "@/contexts/InitialDataContext";
 
 const reasons = [
   { icon: Target, title: "Built for Phone Shops", desc: "Every screen, field, and workflow is designed for mobile phone retail." },
@@ -16,15 +17,18 @@ const reasons = [
   { icon: Users, title: "Industry Understanding", desc: "Our team has spent years studying phone shop operations." },
 ];
 
-const WhyUs = () => (
+const WhyUs = () => {
+  const initialData = useInitialData();
+
+  return (
   <Layout>
     <section className="pt-32 pb-16">
       <div className="container mx-auto px-4 lg:px-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl">
+        <div className="max-w-3xl">
           <span className="section-header-label">Why Choose Us</span>
           <h1 className="text-4xl md:text-5xl font-heading font-bold mt-3 mb-6 text-foreground">Why Phone Shops Choose <span className="text-primary">Cellivo</span></h1>
           <p className="text-lg text-muted-foreground leading-relaxed">There are many POS systems on the market. Here's why mobile retailers trust us.</p>
-        </motion.div>
+        </div>
       </div>
     </section>
     <SectionWrapper>
@@ -38,9 +42,10 @@ const WhyUs = () => (
         ))}
       </div>
     </SectionWrapper>
-    <TestimonialsSection />
+    <TestimonialsSection testimonials={initialData.homepageSocialProof?.testimonials ?? []} />
     <FinalCTA />
   </Layout>
-);
+  );
+};
 
 export default WhyUs;

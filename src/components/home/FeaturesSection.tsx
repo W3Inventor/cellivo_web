@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "@/components/LightMotion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,16 +8,16 @@ import {
 } from "lucide-react";
 
 const features = [
-  { icon: Receipt, title: "30-Second Billing", desc: "Create invoices with auto-tax, discounts, and multiple payment methods." },
-  { icon: Hash, title: "IMEI & Serial Tracking", desc: "Every phone gets an IMEI record. Instant lookup and complete traceability." },
-  { icon: Smartphone, title: "Phone Inventory", desc: "Catalog by make, model, color, storage, and condition." },
-  { icon: Wrench, title: "Repair Management", desc: "Log jobs, assign technicians, track parts, and auto-notify customers." },
-  { icon: Headphones, title: "Accessory Stock Control", desc: "Track cases, chargers, and protectors with low-stock alerts." },
-  { icon: Users, title: "Customer Records", desc: "Full purchase and repair history per customer." },
-  { icon: BarChart3, title: "Sales & Profit Reports", desc: "Daily revenue, margins per product, top sellers, and peak hours." },
-  { icon: UserCog, title: "Staff Access Controls", desc: "Role-based permissions for cashiers, technicians, and managers." },
-  { icon: TrendingUp, title: "Margin Visibility", desc: "Know your profit per phone, per accessory, per repair." },
-  { icon: Building2, title: "Multi-Location Ready", desc: "Run multiple shops from one dashboard." },
+  { icon: Receipt, title: "Fast POS Billing", desc: "Create invoices in seconds with discounts, multiple payment methods, and cleaner front-desk workflows.", path: "/billing-software-for-mobile-shop" },
+  { icon: Hash, title: "IMEI and Serial Tracking", desc: "Track every phone with IMEI and serial records for sales, stock control, and warranty visibility.", path: "/imei-tracking-pos-system" },
+  { icon: Smartphone, title: "Mobile Inventory Management", desc: "Manage phone models, storage, color, condition, and accessory stock from one inventory system." },
+  { icon: Wrench, title: "Repair Management System", desc: "Create repair jobs, assign technicians, update status, and keep customers informed.", path: "/mobile-repair-management-software" },
+  { icon: Headphones, title: "Accessory Stock Control", desc: "Monitor chargers, cables, cases, and protectors with low-stock alerts and better reorder timing." },
+  { icon: Users, title: "Customer Records", desc: "Keep complete sales history, repair history, and contact details in one place." },
+  { icon: BarChart3, title: "Sales and Profit Reports", desc: "See revenue, margins, top-selling products, and store performance in real time." },
+  { icon: UserCog, title: "Staff Permissions", desc: "Control access for cashiers, technicians, branch managers, and admins." },
+  { icon: TrendingUp, title: "Margin Visibility", desc: "Track profit by device, accessory, repair, and salesperson." },
+  { icon: Building2, title: "Multi-Branch Ready", desc: "Run multiple phone shops with centralized visibility and stock transfer support.", path: "/multi-branch-pos-system" },
 ];
 
 const FeaturesSection = () => {
@@ -38,13 +38,20 @@ const FeaturesSection = () => {
         <div className="text-center mb-12 md:mb-16">
           <span className="section-header-label">What You Get</span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-foreground mb-5 leading-[1.1]">
-            Everything Your Phone Shop Needs
+            Everything You Need in a <span className="text-primary">Mobile Shop POS System</span>
           </h2>
           <div className="premium-divider" />
           <p className="section-header-desc">
-            Every feature works out of the box the moment you sign up.
+            Cellivo combines <Link to="/billing-software-for-mobile-shop" className="text-primary underline underline-offset-4 hover:text-primary/80">POS billing</Link>, inventory, <Link to="/imei-tracking-pos-system" className="text-primary underline underline-offset-4 hover:text-primary/80">IMEI and serial tracking</Link>, <Link to="/mobile-repair-management-software" className="text-primary underline underline-offset-4 hover:text-primary/80">repairs</Link>, reporting, and staff control in one phone shop software platform for stores that need a stronger POS system for phone shop teams.
           </p>
         </div>
+
+        <p className="text-sm text-muted-foreground mb-4 text-center">
+          Looking for a complete solution?{" "}
+          <Link to="/mobile-shop-pos-system" className="text-primary underline underline-offset-4 hover:text-primary/80">
+            Explore the full mobile shop POS system →
+          </Link>
+        </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
           {features.map((f, i) => (
@@ -60,19 +67,27 @@ const FeaturesSection = () => {
                 <f.icon size={18} className="text-foreground/70 group-hover:text-primary transition-colors md:hidden" />
                 <f.icon size={20} className="text-foreground/70 group-hover:text-primary transition-colors hidden md:block" />
               </div>
-              <h3 className="font-heading font-semibold text-foreground mb-1 md:mb-1.5 text-sm">{f.title}</h3>
+              <h3 className="font-heading font-semibold text-foreground mb-1 md:mb-1.5 text-sm">
+                {f.path ? (
+                  <Link to={f.path} className="hover:text-primary transition-colors">
+                    {f.title}
+                  </Link>
+                ) : (
+                  f.title
+                )}
+              </h3>
               <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>
 
         <div className="text-center mt-12 space-y-3">
-          <Link to="/contact">
+          <Link to="/features">
             <Button className="bg-foreground text-background hover:bg-foreground/90 font-medium px-8 h-12 rounded-xl text-sm">
-              Start Free — All Features Included <ArrowRight className="ml-2" size={15} />
+              Explore All Features <ArrowRight className="ml-2" size={15} />
             </Button>
           </Link>
-          <p className="text-xs text-muted-foreground">No credit card required. Ready in under 2 minutes.</p>
+          <p className="text-xs text-muted-foreground">Phone shop billing, IMEI tracking, repairs, and inventory in one system.</p>
         </div>
       </div>
     </motion.section>
