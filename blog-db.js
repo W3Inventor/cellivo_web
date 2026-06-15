@@ -152,9 +152,9 @@ const DEFAULT_PRICING_CTA_URLS = {
 
 const DEFAULT_PRICING_AMOUNTS = {
   lite: {
-    monthly: { lkrPrice: "3900", usdPrice: "13" },
-    yearly: { lkrPrice: "39000", usdPrice: "130" },
-    lifetime: { lkrPrice: "180000", usdPrice: "600" },
+    monthly: { lkrPrice: "2900", usdPrice: "10" },
+    yearly: { lkrPrice: "29000", usdPrice: "97" },
+    lifetime: { lkrPrice: "149000", usdPrice: "497" },
   },
   starter: {
     monthly: { lkrPrice: "7000", usdPrice: "23" },

@@ -137,7 +137,7 @@ const AdminPricingLinks = () => {
                 <Input
                   value={plan.lkrPrice}
                   onChange={(event) => updatePlanLink(index, "lkrPrice", event.target.value)}
-                  placeholder="3900"
+                  placeholder="2900"
                   inputMode="decimal"
                 />
               </div>
